@@ -47,3 +47,23 @@
     - 因為! 預設gae是執行main.py這一個檔案 (而我的主程式是app.py) (gae也是使用gunicorn)
     - 改個名字，再重新deploy就正常了
 
+## Flask + SQL 在GAE上的配置
+- [參考這一篇](https://blog.uccloud.com.tw/2018/10/28/%E9%83%A8%E7%BD%B2-django-2-%E8%87%B3-app-engine-2nd-%E6%A8%99%E6%BA%96%E7%92%B0%E5%A2%83%E6%95%99%E5%AD%B8/)
+
+- 注意!! 應用程式的地區設定完成後即無法更改。
+- 因為GAE, Cloud SQL在同一個點，效能比較好，所以作者建議都在`香港`
+
+- [GAE地點](https://cloud.google.com/appengine/docs/locations)，看起來最近的就是這三個：
+    - asia-northeast1 (東京)
+    - asia-northeast2 (大阪)
+    - asia-east2 (香港)
+
+- [Cloud SQL](https://cloud.google.com/sql/docs/mysql/locations)，這個地點在亞洲就多了
+	- asia-east1	台灣	
+    - asia-east2	香港	僅第二代執行個體
+    - asia-northeast1	東京	僅第二代執行個體
+    - asia-northeast2	大阪	僅第二代執行個體
+    - asia-south1	孟買	僅第二代執行個體
+    - asia-southeast1	新加坡	僅第二代執行個體
+
+- 待續… (還正在從NoSQL改成SQL中…)
