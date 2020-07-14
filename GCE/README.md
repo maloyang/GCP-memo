@@ -214,6 +214,17 @@ $ SHOW GRANTS FOR 'my_account';
 
 - 重開mariadb，讓設定值生效: `sudo systemctl restart mysql`
 
+- 而我們為安全起見，把port改到其它不常見的port，比較不用被亂try成功，一樣修改同上面的設定檔 `sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf`
+```
+# * Basic Settings
+#
+user            = mysql
+pid-file        = /var/run/mysqld/mysqld.pid
+socket          = /var/run/mysqld/mysqld.sock
+#port           = 3306
+port            = 8787
+basedir         = /usr
+```
 
 ----
 ## 以下為測試後，好像沒什麼用，但暫時不刪掉，先留下來的資料
