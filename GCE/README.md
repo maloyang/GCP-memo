@@ -115,6 +115,107 @@ Jul 08 06:07:10 instance-1 systemd[1]: Started PostgreSQL RDBMS.
     - 最後還要在防火牆中把GCP的modbus port打開
 
 ----
+## 安裝 MariaDB
+參考這一篇：https://pcion123.github.io/2019/03/16/ubuntu-installmariadb/
+
+- 下指令:
+```
+sudo apt update
+sudo apt upgrade
+sudo apt install mariadb-server
+```
+- 確認系統是否有正常跑起來 `sudo systemctl status mysql`
+```
+● mariadb.service - MariaDB 10.1.44 database server
+   Loaded: loaded (/lib/systemd/system/mariadb.service; enabled; vendor preset: enabled)
+   Active: active (running) since Tue 2020-07-14 08:07:16 UTC; 44min ago
+     Docs: man:mysqld(8)
+           https://mariadb.com/kb/en/library/systemd/
+ Main PID: 4690 (mysqld)
+   Status: "Taking your SQL requests now..."
+    Tasks: 27 (limit: 638)
+   CGroup: /system.slice/mariadb.service
+           └─4690 /usr/sbin/mysqld
+
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: Processing databases
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: information_schema
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: mysql
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: performance_schema
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: Phase 6/7: Checking and upgrading tables
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: Processing databases
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: information_schema
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: performance_schema
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: Phase 7/7: Running 'FLUSH PRIVILEGES'
+Jul 14 08:07:16 db-server /etc/mysql/debian-start[4727]: OK
+```
+
+- 對mariadb初始安全性設定，下指令: `sudo mysql_secure_installation`，我使用時比下面多了一個是否使用目前root帳號的密碼，我是按enter直接跳過
+```
+# 是否要設置root權限密碼
+- Set root password? [Y/n] y
+# 是否要移除匿名登入
+- Remove anonymous users? [Y/n] y
+# 是否關閉遠端登入
+- Disallow root login remotely? [Y/n] y
+# 是否移除test預設庫
+- Remove test database and access to it? [Y/n] y
+# 是否重新載入資料表權限
+- Reload privilege tables now? [Y/n] y
+```
+
+- 指令 `sudo mysql -u root -p` 確認是否可以用root登入
+```
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 49                                                                                   
+Server version: 10.1.44-MariaDB-0ubuntu0.18.04.1 Ubuntu 18.04                                                      
+                                                                                                                   
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.                                               
+                                                                                                                   
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.                                     
+                                                                                                                   
+MariaDB [(none)]> \q                                                                                               
+Bye
+```
+
+### 設定遠端連線的使用者
+- 先用root指入設定 `sudo mysql -u root -p`
+```
+# 建立使用者
+$ CREATE USER 'my_account'@'%' IDENTIFIED BY 'my_password';
+# 建立使用者權限
+$ GRANT ALL PRIVILEGES ON *.* TO 'my_account'@'%' IDENTIFIED BY 'my_password' WITH GRANT OPTION;
+# 刷新設置
+$ FLUSH PRIVILEGES;
+```
+過程如下：
+```
+MariaDB [(none)]> CREATE USER 'user'@'%' IDENTIFIED BY 'userpassword';                          
+Query OK, 0 rows affected (0.00 sec)
+                                                                                                                   
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON *.* TO 'user'@'%' IDENTIFIED BY 'userpassword' WITH GRANT OPTION; 
+Query OK, 0 rows affected (0.00 sec)
+                                                                                                                   
+MariaDB [(none)]> FLUSH PRIVILEGES;                                                                                
+Query OK, 0 rows affected (0.00 sec)
+```
+
+- 確認建立的user
+```
+# 查看使用者
+$ SELECT host,user,password FROM mysql.user;
+# 查看使用者權限
+$ SHOW GRANTS FOR 'my_account';
+```
+
+- 因為我們是在GCE的vm上建立服務的，因此要把port號 3306 打開
+
+- 這時仍然是連不上，要再修改這一個檔案 `sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf`，把 `bind-address  = 127.0.0.1`註解掉就行了!
+
+- 重開mariadb，讓設定值生效: `sudo systemctl restart mysql`
+
+
+----
 ## 以下為測試後，好像沒什麼用，但暫時不刪掉，先留下來的資料
 
 
