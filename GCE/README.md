@@ -126,7 +126,11 @@ sudo apt update
 sudo apt upgrade
 sudo apt install mariadb-server
 ```
-- 確認系統是否有正常跑起來 `sudo systemctl status mysql`
+- 確認系統是否有正常跑起來 `sudo systemctl status mysql` or `systemctl status mariadb`
+    - 啟動: `systemctl start mariadb`
+    - 關閉: `systemctl stop mariadb`
+    - 重啟: `systemctl restart mariadb`
+
 ```
 ● mariadb.service - MariaDB 10.1.44 database server
    Loaded: loaded (/lib/systemd/system/mariadb.service; enabled; vendor preset: enabled)
@@ -227,6 +231,35 @@ socket          = /var/run/mysqld/mysqld.sock
 port            = 8787
 basedir         = /usr
 ```
+
+## 安裝 MSSQL Server [目前NG中]
+參考：https://docs.microsoft.com/zh-tw/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver15
+
+- 據說會失敗是因為我的vm沒有足夠大的RAM ([參考文章](https://dba.stackexchange.com/questions/156470/unable-to-start-sql-server-on-ubuntu-16-04) : SQL Server did not start because the OS did not have 3250MB of memory)
+
+- 匯入金鑰: `wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -`
+- 為 SQL Server 2019 註冊 Microsoft SQL Server Ubuntu 存放庫: `sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/18.04/mssql-server-2019.list)"`
+- 安裝: 
+```
+sudo apt-get update
+sudo apt-get install -y mssql-server
+```
+- 設定SA (administrator)密碼: `sudo /opt/mssql/bin/mssql-conf setup`
+- 確認是否服務有執行: `systemctl status mssql-server` --> deactive
+- 果然使用google最低的micro-f1的vm果然不行…還是mariadB & postgreSQL比較好處理!
+- 用指令: `journalctl -u mssql-server.service -b` 確認
+    - 是因為要有2G以上的RAM才行: sqlservr: This program requires a machine with at least 2000 megabytes
+
+### 安裝 SQL Server 命令列工具
+- 匯入金鑰: `curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -`
+- `curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list`
+- 安裝:
+```
+sudo apt-get update 
+sudo apt-get install mssql-tools unixodbc-dev
+```
+- `/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '<YourPassword>'`
+
 
 ----
 ## 以下為測試後，好像沒什麼用，但暫時不刪掉，先留下來的資料
