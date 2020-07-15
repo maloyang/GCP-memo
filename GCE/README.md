@@ -93,7 +93,9 @@ Jul 08 06:07:10 instance-1 systemd[1]: Started PostgreSQL RDBMS.
 - 參考這一篇：https://cloud.google.com/community/tutorials/setting-up-postgres
     - 先修改 `/etc/postgresql/9.3/main/postgresql.conf`中的 `listen_addresses = '*'`
     - 還要修改 `/etc/postgresql/9.3/main/pg_hba.conf` 末端加入 :
-        `host    all             all           [YOUR_IPV4_ADDRESS]/32         md5`
+        - `host    all             all           [YOUR_IPV4_ADDRESS]/32         md5`
+        - 例子 `host all all 211.23.127.219/32 md5` 代表要開放一個IP可以連線，要注意這個IP指的是client IP不是Server IP
+        - 例子，所有IP全開放: `host all all 0.0.0.0/0 md5'
     - 再 `sudo service postgresql restart`
     - 這邊有這個檔案的說明: https://docs.postgresql.tw/server-administration/client-authentication/the-pg_hba.conf-file
     - 不過 your_ip_address是指client端的IP，所以怪怪的，應該要有全開放的寫法才對
