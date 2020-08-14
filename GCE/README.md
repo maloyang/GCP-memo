@@ -104,6 +104,7 @@ Jul 08 06:07:10 instance-1 systemd[1]: Started PostgreSQL RDBMS.
 ### 建立iot server安裝的venv環境
 
 - 建立一個iot-server專案，需要的東西
+    - sudo apt install python3-venv
     - python3 -m venv venv
     - source venv/bin/activate
     - pip install modbus_tk
