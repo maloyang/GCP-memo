@@ -111,10 +111,7 @@ Jul 08 06:07:10 instance-1 systemd[1]: Started PostgreSQL RDBMS.
     - pip install sqlalchemy
     - pip install requests
     - pip install pymssql
-    - pip install psycopg2  --> 這個會出錯: Error: b'You need to install postgresql-server-dev-X.Y for building a server-side extension or libpq-dev for building a client-side application.\n'
-    - 改成以apt安裝: sudo apt install python3-psycopg2 --> 也不行
-    - sudo apt install libpq-dev python-dev  --> 先安裝要在本地端build套件的lib就可以用pip安裝了
-    - pip install psycopg2  --> 結果：Successfully installed psycopg2-2.8.5
+    - pip install psycopg2-binary  --> 直接用的一個就好，不然要有os中要有gcc等重build套件的工具在才行
     - 最後還要在防火牆中把GCP的modbus port打開
 
 ----
