@@ -105,7 +105,7 @@ services:
 - 讓他背景執行，結果如下: `docker-compose -f stack.yml up -d`
 - 如果是測試可以不加 -d 可以用 ctrl^c 就中斷
 - 為服務開個port， `sudo ufw allow 3380/tcp`, `sudo ufw allow 3306/tcp`
-- 這時開網頁 【http://161.35.123.157:23380/】，只要輸入DB的帳密就可以登入
+- 這時開網頁 `http://161.35.123.157:3380/`，只要輸入DB的帳密就可以登入
 
 
 ## 用docker建立SQL Server2019
