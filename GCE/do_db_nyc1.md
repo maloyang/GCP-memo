@@ -114,6 +114,43 @@ services:
 - 開port 11433: `sudo ufw allow 1433/tcp`
 - 再重開後，sql server就沒服務了，要加上 restart 參數: `docker update --restart unless-stopped sql1`
 
+### 安裝 postgreSQL
 
+- TODO
+
+
+### 安裝vsftp
+
+[ref](https://www.alvinchen.club/2019/12/11/ubuntu-ftp-server-%E6%9E%B6%E8%A8%AD/)
+
+- sudo apt install vsftpd
+- sudo nano /etc/vsftpd.conf    修改內容如下
+```
+/*加入以下資訊*/
+pasv_enable=Yes
+pasv_min_port=20000
+pasv_max_port=20100
+#local_root=/home/ftp /*(這是登入的根目錄)*/
+```
+- local_root可以讓使用者的起始目錄都在 /home/ftp 中
+- sudo service vsftpd restart
+- 建立一個不可登入的使用者: ftpuser1
+- `sudo useradd -m ftpuser1 -s /usr/sbin/nologin`
+- 設定密碼: `sudo passwd ftpuser1`
+- 重開: `sudo service vsftpd restart`
+- 開啟防火牆讓port=21, 和pasv可以通過: 
+  - `sudo ufw allow 20000:20100/tcp`
+  - `sudo ufw allow 21/tcp`
+- 編輯 /etc/shells檔案，在最後加入  `/user/sbin/nologin`
+- 限制上線人數、同IP上限數
+  - 編輯 `/etc/vsftpd/vsftpd.conf`，加入
+  - max_clients=5
+  - max_per_ip=2
+- 設定哪個帳號可以連線 (vsftpd.conf)
+  - userlist_enable=YES
+  - userlist_deny=NO
+  - userlist_file=/etc/vsftpd.user_list
+  - allow_writeable_chroot=YES
+- 設定白名單於 `/etc/vsftpd.user_list`，加入: `ftpuser1`
 
 
