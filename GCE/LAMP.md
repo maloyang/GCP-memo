@@ -55,3 +55,12 @@ Query OK, 0 rows affected (0.00 sec)
 
 - 先建立一個 /var/www/html/info.php 測試php功能
 `sudo nano /var/www/html/info.php`
+
+### 如果有需要用簡單的帳密登入，可以這樣設定 (但還是使用金鑰比較安全啦)
+- 編輯 【/etc/ssh/sshd_config】
+- 設定可以用帳密登入
+  - 修改這一個選項: `PasswordAuthentication yes`
+- 設定root不能用putty ssh登入 (很重要!!!! 至少root要不可遠端登入，不然很快就會被攻破)
+  - 修改 PermitRootLogin 項目為 no
+- 並加入retry次數: `MaxAuthTries 6`
+- 再以 service sshd restart 載入設定，登出後，再以root連線被拒
