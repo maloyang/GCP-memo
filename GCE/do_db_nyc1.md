@@ -154,7 +154,7 @@ pasv_max_port=20100
 - 設定白名單於 `/etc/vsftpd.user_list`，加入: `ftpuser1`
 
 ----
-### MQTT: mosquitto
+## MQTT: mosquitto
 
 ref: https://oranwind.org/-edge-zai-ubuntu-an-zhuang-mosquitto-mqtt-broker-part-2/
 
@@ -164,12 +164,14 @@ sudo apt install -y mosquitto
 
 sudo apt install -y mosquitto-clients
 
-# subscribe topic
+### subscribe topic
 mosquitto_sub -h 34.81.218.11 -t /malo/T
 
-# publish topic
+### publish topic
 mosquitto_pub -h 34.81.218.11 -t /malo/T -m "30"
 
-# 如果有使用ufw的防火牆設定的話
+### 如果有使用ufw的防火牆設定的話
 sudo ufw allow 1883/tcp
+
+### 若是使用GCP的話，則是要在gcp的防火牆設定加上1883/tcp開放通過
 
