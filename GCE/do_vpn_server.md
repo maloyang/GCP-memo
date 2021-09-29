@@ -24,9 +24,23 @@ remoteip 10.0.0.100-200
 ```
 username1 pptpd password1
 ```
-- 修改 /etc/ppp/pptpd-options ，檔案最後加入
+- 修改 /etc/ppp/pptpd-options ，檔案中找到'ms-dns'的字眼，加入以下的文字
 ```
 ms-dns 8.8.8.8
 ms-dns 1.1.1.1
 ```
+- sudo service pptpd restart 重開
+- 用指令`netstat -alpn | grep :1723`確認程式是否有正常在服務，結果如下，代表有正常
+```
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 0.0.0.0:1723            0.0.0.0:*               LISTEN  
+```
+- 讓封包可以從對外的ip出去
+- `sudo nano /etc/sysctl.conf` 把裡面的`net.ipv4.ip_forward = 1`註解拿掉，讓它生效
+- 並下指令讓它生效 `sudo sysctl -p`
+
+### 防火牆
+- `sudo ufw allow 1723` 因為pptpd要用到1723 port，所以要開放它
 - 
+
