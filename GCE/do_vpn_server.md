@@ -55,6 +55,15 @@ remoteip 10.0.0.100-200
              └─8643 /usr/sbin/pptpd --fg
 ```
 
+### 查詢有哪一個帳號連線上來
+- `last |grep ppp` 結果如下
+```
+farmiot2 ppp0         27.51.33.132     Fri Dec 17 17:25    gone - no logout
+jerry    ppp0         114.33.247.201   Fri Dec 17 16:55 - 16:57  (00:01)
+jerry    ppp1         111.184.233.170  Wed Dec 15 00:03 - 00:14  (00:10)
+```
+
+
 ### ssh的部份
 - 我是有再增加一個帳號，並且把root禁用遠端登入
 
