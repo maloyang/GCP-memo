@@ -108,12 +108,11 @@ services:
 - 這時開網頁 `http://161.35.123.157:3380/`，只要輸入DB的帳密就可以登入
 
 
-## docker 跑 MySQL
-
+## docker 跑 MySQL (目前建議使用最多人用的 5.7.x版, 2019年時佔35%，docker最低版次是mysql5.5.x)
 - 手動配置port
-- `docker run --name mysql_13306 -e MYSQL_ROOT_PASSWORD=my-pwd -d -p 13306:3306 mysql`
+- `docker run --name mysql_13306 -e MYSQL_ROOT_PASSWORD=my-pwd -d -p 13306:3306 mysql:5.7.25`
 - 上面的方式，不會自動restart，改用 (記得 --restart always 要在 -d 正後方)，這樣在登入後就會跑起來
-- `docker run --name mysql_13306 -e MYSQL_ROOT_PASSWORD=my-pwd -d --restart always -p 13306:3306 mysql`
+- `docker run --name mysql_13306 -e MYSQL_ROOT_PASSWORD=my-pwd -d --restart always -p 13306:3306 mysql:5.7.25`
 - 注意!! 外部port寫在前面!
 - 然後在打開防火牆對外port: 13306
 - `sudo ufw allow 13306/tcp`
