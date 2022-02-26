@@ -108,6 +108,23 @@ services:
 - 這時開網頁 `http://161.35.123.157:3380/`，只要輸入DB的帳密就可以登入
 
 
+## docker 跑 MySQL
+
+- 手動配置port
+- `docker run --name mysql_13306 -e MYSQL_ROOT_PASSWORD=my-pwd -d -p 13306:3306 mysql`
+- 上面的方式，不會自動restart，改用 (記得 --restart always 要在 -d 正後方)，這樣在登入後就會跑起來
+- `docker run --name mysql_13306 -e MYSQL_ROOT_PASSWORD=my-pwd -d --restart always -p 13306:3306 mysql`
+- 注意!! 外部port寫在前面!
+- 然後在打開防火牆對外port: 13306
+- `sudo ufw allow 13306/tcp`
+- 這樣就可以連線了!
+
+### 安裝 phpmyadmin做為mysql管理軟體
+- `docker run --name phpmyadmin_13306 -d --link mysql_13306 -e PMA_HOST="mysql" -p 10080:80 phpmyadmin/phpmyadmin`
+- 其中 --link 接的是docker的mysql代號，PMA_HOST應該是資料庫類型
+- 防火牆再開放服務的port就可以了: `sudo ufw allow 10080/tcp`
+
+
 ## 用docker建立SQL Server2019
 
 - `docker run -e "ACCEPT_EULA=Y" -e "1qazADMIN@123" -p 1433:1433 --name sql1 -h sql1 -d mcr.microsoft.com/mssql/server:2019-latest`
