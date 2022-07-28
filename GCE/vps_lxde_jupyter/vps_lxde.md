@@ -168,8 +168,23 @@ Swap:         1.0Gi       135Mi       888Mi
 ----
 ### 加入FTP Server功能
 - sudo apt install vsftpd
+
+- 建立一個不可登入的使用者: ftpuser1
+- `sudo useradd -m ftpuser1 -s /usr/sbin/nologin`
+- 設定密碼: `sudo passwd ftpuser1`
+- 編輯 `/etc/shells`檔案，在最後加入 `/usr/sbin/nologin`
+
+- 開啟防火牆讓port=21, 和pasv可以通過:
+  - `sudo ufw allow 20000:20100/tcp`
+  - `sudo ufw allow 21/tcp`
+
 - sudo nano /etc/vsftpd.conf 修改內容如下
 ```
+# 這邊是修改的
+write_enable=YES
+local_umask=022
+
+# 以下為新增的
 pasv_enable=Yes
 pasv_min_port=20000
 pasv_max_port=20100
@@ -187,18 +202,8 @@ allow_writeable_chroot=YES  #沒有加上這個是不能上傳資料的
 
 - 這邊`/etc/vsftpd.chroot_list` 填入 ftpuser1 用來限制他只能在自已的home活動
 
-- 重開vsftpd讓設定生效 `sudo service vsftpd restart`
-- 建立一個不可登入的使用者: ftpuser1
-- `sudo useradd -m ftpuser1 -s /usr/sbin/nologin`
-- 設定密碼: `sudo passwd ftpuser1`
-- 重開: `sudo service vsftpd restart`
-
-- 開啟防火牆讓port=21, 和pasv可以通過:
-  - `sudo ufw allow 20000:20100/tcp`
-  - `sudo ufw allow 21/tcp`
-
-- 編輯 `/etc/shells`檔案，在最後加入 `/usr/sbin/nologin`
 - 設定白名單於 `/etc/vsftpd.user_list`，加入: `ftpuser1`
 
+- 重開vsftpd讓設定生效 `sudo service vsftpd restart`
 
 
