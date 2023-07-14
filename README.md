@@ -28,3 +28,9 @@ NoSQL 資料庫
   - fly.io: 聽說還不錯用的
   
 - 晚點我再來針對不同費用來做點整理試試看
+
+## 其它VM平台資料
+- https://www.hetzner.com/cloud
+- https://www.digitalocean.com/
+- https://www.vultr.com/
+- 
