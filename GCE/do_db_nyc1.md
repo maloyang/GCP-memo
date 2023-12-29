@@ -191,3 +191,24 @@ sudo ufw allow 1883/tcp
 
 ### 若是使用GCP的話，則是要在gcp的防火牆設定加上1883/tcp開放通過
 
+----
+
+## NodeRED with docker
+- 網路上的文章，目前測試ok
+```
+docker run -it -p 11880:1880 -v node_red_data:/data --name nodered_11880 nodered/node-red
+sudo ufw allow 11880/tcp
+```
+- demo2:
+```
+以下為不掛資料夾在本地端的方式，重開機、重新啟動應該就會資料消失
+docker run -it -p 21880:1880 --name nodered_21880 nodered/node-red
+sudo ufw allow 21880/tcp
+```
+
+- demo3:
+```
+docker run --name nodered_21880 -it -p 21880:1880 -v node_red_data:/data  nodered/node-red
+docker run --name mariadb_13306 -e MYSQL_ROOT_PASSWORD=my-pwd -d --restart always -p 13306:3306 mariadb
+```
+
